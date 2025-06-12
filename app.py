@@ -1,18 +1,32 @@
 import marimo
 
 __generated_with = "0.13.15"
-app = marimo.App(width="medium", css_file="./static/output.css")
+app = marimo.App(
+    width="medium",
+    css_file="./static/output.css",
+    html_head_file="",
+)
 
-
-@app.cell
-def _():
+with app.setup:
     import marimo as mo
-    from mohtml import div, p, h1
-    return
+    from mohtml import div, p, h1, bootstrap_css, h5
 
 
 @app.cell
 def _():
+    txt = "The quick brown fox jumped over the lazy dog. 🐶"
+    return (txt,)
+
+
+@app.cell
+def _():
+    style = "text-red-800 text-shadow-cyan-500 font-extrabold text-center text-shadow-md"
+    return (style,)
+
+
+@app.cell
+def _(style, txt):
+    div(txt,klass=style)
     return
 
 
