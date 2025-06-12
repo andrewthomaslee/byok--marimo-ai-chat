@@ -6,6 +6,13 @@ app = marimo.App(width="medium", css_file="./static/output.css")
 
 @app.cell
 def _():
+    import marimo as mo
+    from mohtml import div, p, h1
+    return
+
+
+@app.cell
+def _():
     return
 
 
