@@ -6,13 +6,13 @@ app = marimo.App(width="medium", css_file="./static/output.css")
 with app.setup:
     # Initialization code that runs before all other cells
     import marimo as mo
-    from pydantic import BaseModel, ConfigDict
-    from mohtml import img,div,link,a,script
+    from mohtml import div
     from enum import Enum
+    from pydantic import BaseModel, ConfigDict, Field, field_validator, ValidationError
 
 
 @app.class_definition
-class ICONS(str, Enum):
+class ICONS(Enum):
     """
     An enumeration of icon identifiers.
     Each member is a string and can be used directly.
@@ -58,12 +58,6 @@ class ICONS(str, Enum):
     SUN = 'line-md:sunny-filled'
     MOON = 'line-md:moon-simple-twotone'
 
-
-
-
-
-
-
     def __str__(self):
         # This makes print(Icon.DISCORD) show the string value directly
         return self.value
@@ -77,7 +71,7 @@ class ICONS(str, Enum):
         return self._member_map_
 
     @classmethod
-    def show_all_icons(self, style:str="text-gray-600 text-xl m-auto p-auto" ):
+    def show_all_icons(self, style:str="text-xl m-auto p-auto" ):
         stack=list()
         for name,icon in self.dict().items():
             pair = div(*[name," - ",mo.icon(icon)],klass=style)
@@ -89,25 +83,6 @@ class ICONS(str, Enum):
 @app.cell
 def _():
     ICONS.show_all_icons()
-    return
-
-
-@app.cell
-def _():
-    stack=list()
-    stylez = "text-green-600 text-5xl"
-    for name,icon in ICONS.dict().items():
-        pair = div(*[name,mo.icon(icon)],klass=stylez)
-        stack.append(pair)
-
-    mo.vstack(stack)
-    return
-
-
-@app.cell
-def _():
-    style = "text-red-500 text-3xl hover:text-blue-500 transition-all duration-400 ease-linear"
-    div(mo.icon(ICONS.DISCORD),klass=style)
     return
 
 
