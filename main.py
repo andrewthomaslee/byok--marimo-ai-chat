@@ -1,28 +1,47 @@
 import marimo
 
 __generated_with = "0.13.15"
-app = marimo.App(width="medium")
+app = marimo.App(width="medium", css_file="./static/output.css")
 
 with app.setup:
     # Initialization code that runs before all other cells
     import marimo as mo
-    from elms import discord_sidebar
+    from elms import discord_sidebar,sidebar_item
     from mohtml import div
+    from models import ICONS
+    import time
+
+
+@app.function
+def output_test(_):
+    print(time.time())
 
 
 @app.cell
 def _():
-    my_elm = \
-    """<div class="fixed top-0 left-0 h-screen w-16 flex flex-col bg-gray-900 text-white shadow-lg">
-    <p>Hello World</p>
-    </div>
-    """
-    return (my_elm,)
+    get_state, set_state = mo.state(None)
+    buttons = \
+    [
+        sidebar_item(i,on_change=lambda v, i=i: set_state(i))
+        for i in ICONS.list_providers()
+    ]
+    bar = mo.vstack(
+        buttons,
+        align="center",
+    )
+    bar
+    return (get_state,)
 
 
 @app.cell
-def _(my_elm):
-    mo.Html(my_elm)
+def _(get_state):
+    get_state()
+    return
+
+
+@app.cell
+def _():
+    ICONS.list_providers()
     return
 
 

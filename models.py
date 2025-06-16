@@ -57,6 +57,15 @@ class ICONS(Enum):
     COFFEE_FULL = 'line-md:coffee-twotone-loop'
     SUN = 'line-md:sunny-filled'
     MOON = 'line-md:moon-simple-twotone'
+    OPENAI = 'ri:openai-fill'
+    ANTHROPIC = 'ri:anthropic-fill'
+    GOOGLE = 'ri:google-fill'
+    META = 'ri:meta-fill'
+    XAI = 'ri:twitter-x-fill'
+    NVIDIA = 'bi:nvidia'
+    OLLAMA = 'simple-icons:ollama'
+
+
 
     def __str__(self):
         # This makes print(Icon.DISCORD) show the string value directly
@@ -78,6 +87,18 @@ class ICONS(Enum):
             stack.append(pair)
 
         return mo.vstack(stack)
+    
+    @classmethod
+    def list_providers(self):
+        return [
+            self.OPENAI,
+            self.ANTHROPIC,
+            self.GOOGLE,
+            self.META,
+            self.XAI,
+            self.NVIDIA,
+            self.OLLAMA
+        ]
 
 
 @app.cell
