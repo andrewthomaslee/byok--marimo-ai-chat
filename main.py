@@ -6,56 +6,46 @@ app = marimo.App(width="medium", css_file="./static/output.css")
 with app.setup:
     # Initialization code that runs before all other cells
     import marimo as mo
-    from elms import discord_sidebar,sidebar_item
-    from mohtml import div
+    from elms import sidebar_item
+    from mohtml import div,p,span
     from models import ICONS
-    import time
-
-
-@app.function
-def output_test(_):
-    print(time.time())
+    from funcs import extract_icon_name
 
 
 @app.cell
 def _():
-    get_state, set_state = mo.state(None)
+    get_active_provider, set_active_provider = mo.state(None)
+    return get_active_provider, set_active_provider
+
+
+@app.cell
+def _(get_active_provider):
+    active_provider = "" if get_active_provider() is None else extract_icon_name(get_active_provider()).lower().title()
+    return (active_provider,)
+
+
+@app.cell
+def _(active_provider, get_active_provider, set_active_provider):
     buttons = \
     [
-        sidebar_item(i,on_change=lambda v, i=i: set_state(i))
-        for i in ICONS.list_providers()
+        sidebar_item(icon,on_change=lambda v, i=icon: set_active_provider(i))
+        if get_active_provider() != icon
+        else sidebar_item(icon,on_change=lambda v, i=icon: set_active_provider(i),active=True)
+        for icon in ICONS.list_providers()
     ]
     bar = mo.vstack(
         buttons,
         align="center",
+        justify="center"
     )
-    return bar, get_state
 
-
-@app.cell
-def _(get_state):
-    get_state()
-    return
-
-
-@app.cell
-def _():
-    ICONS.list_providers()
-    return
-
-
-@app.cell
-def _(bar):
     div(
         bar,
-        klass="fixed right-0 top-1/2 -translate-y-1/2 flex flex-col items-center gap-4 py-4 px-3 bg-gray-900 shadow-lg rounded-l-xl w-auto h-auto overflow-visible z-50 transition-all duration-300"
+        p(active_provider,
+        klass="text-xs text-gray-500"
+        ),
+        klass="flex flex-col border-2 w-18 p-3 m-3 rounded-xl items-center justify-center bg-gray-900"
     )
-    return
-
-
-@app.cell
-def _(bar):
-    bar
     return
 
 

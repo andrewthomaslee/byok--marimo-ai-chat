@@ -5,25 +5,18 @@ from typing import Annotated, Callable, Any
 from models import ICONS
 
 
-
-def discord_sidebar(elms:list)->div:
-    return (
-        div(mo.vstack(elms),
-           klass="fixed top-0 left-0 h-screen w-16 flex flex-col bg-gray-900 text-white shadow-lg"
-           )
-    )
-
-
 @validate_call
-def sidebar_item(icon:ICONS,tooltip:str=None,on_change:Callable=None,func:Callable=None)->div:
+def sidebar_item(icon:ICONS,on_change:Callable[[Any],None],active:bool=False,tooltip:str=None)->div:
 
-    icon = str(div(mo.icon(icon).text,klass="sidebar-icon"))
+    if active:
+        style = "sidebar-icon-active"
+    else:
+        style = "sidebar-icon"
+        
+    icon = str(div(mo.icon(icon,size=23).text,klass=style))
     
     return div(
-        div(
-        mo.ui.button(
-            on_click=func,
-            value=None,
+        mo.ui.run_button(
             kind='neutral',
             tooltip=tooltip,
             label=icon,
@@ -31,7 +24,5 @@ def sidebar_item(icon:ICONS,tooltip:str=None,on_change:Callable=None,func:Callab
             full_width=True,
             keyboard_shortcut=None
             ),
-            klass="max-w-0.5 max-h-0.5"
-        ),
-        klass="w-12 h-12"
-    )
+            klass="w-10 my-2"
+        )
