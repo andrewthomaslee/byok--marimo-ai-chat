@@ -29,8 +29,7 @@ def _():
         buttons,
         align="center",
     )
-    bar
-    return (get_state,)
+    return bar, get_state
 
 
 @app.cell
@@ -42,6 +41,21 @@ def _(get_state):
 @app.cell
 def _():
     ICONS.list_providers()
+    return
+
+
+@app.cell
+def _(bar):
+    div(
+        bar,
+        klass="fixed right-0 top-1/2 -translate-y-1/2 flex flex-col items-center gap-4 py-4 px-3 bg-gray-900 shadow-lg rounded-l-xl w-auto h-auto overflow-visible z-50 transition-all duration-300"
+    )
+    return
+
+
+@app.cell
+def _(bar):
+    bar
     return
 
 
