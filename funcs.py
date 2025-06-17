@@ -17,7 +17,7 @@ def extract_icon_name(icon: ICONS)->str:
     Extracts the icon name using string splitting.
     """
     s = icon.__repr__()
-    return s.split('.')[1].split(':')[0]
+    return s.split('.')[1].split(':')[0].lower().title()
 
 
 if __name__ == "__main__":

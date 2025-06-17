@@ -1,9 +1,10 @@
 import requests
-from pydantic import BaseModel, ConfigDict, Field, field_validator, ValidationError
+from functools import lru_cache
+from pydantic import BaseModel, ConfigDict, Field, field_validator, ValidationError, computed_field
 
 
 class Architecture(BaseModel):
-    model_config = ConfigDict()
+    model_config = ConfigDict(frozen=True)
 
     input_modalities: list[str] = Field(description="Supported input types")
     output_modalities: list[str] = Field(description="Supported output types")
@@ -12,7 +13,7 @@ class Architecture(BaseModel):
 
 
 class Pricing(BaseModel):
-    model_config = ConfigDict()
+    model_config = ConfigDict(frozen=True)
 
     prompt: float | None = Field(default=None,description="Cost per input token")
     completion: float | None = Field(default=None,description="Cost per output token")
@@ -25,7 +26,7 @@ class Pricing(BaseModel):
 
 
 class TopProvider(BaseModel):
-    model_config = ConfigDict()
+    model_config = ConfigDict(frozen=True)
 
     context_length: int | None = Field(description="Provider-specific context limit")
     max_completion_tokens: int | None = Field(description="Maximum tokens in response")
@@ -33,7 +34,7 @@ class TopProvider(BaseModel):
 
 
 class OpenRouterModel(BaseModel):
-    # model_config = ConfigDict()
+    model_config = ConfigDict(frozen=True)
 
     id_: str = Field(alias="id",description="Unique model identifier used in API requests")
     canonical_slug:  str = Field(description="Permanent slug for the model that never changes")
@@ -48,10 +49,11 @@ class OpenRouterModel(BaseModel):
     supported_parameters: list[str] = Field(description="Array of supported API parameters for this model")
 
 
-class OpenRouterData(BaseModel):
-    model_config = ConfigDict()
+class OpenRouter(BaseModel):
+    model_config = ConfigDict(frozen=True)
 
     data: list[OpenRouterModel] = Field(description="List of available models")
+    base_url: str = "https://openrouter.ai/api/v1/"
 
     @classmethod
     def get_openrouter_data(self,headers:dict=None):
@@ -66,12 +68,70 @@ class OpenRouterData(BaseModel):
         response.raise_for_status()
 
         return response.json()
+    
+    @computed_field
+    @property
+    def names_of_providers_and_slugs_dict(self)->dict:
+        result = dict()
+        for model in self.data:
+            provider, slug = model.id_.split("/")
+
+            try:
+                result[provider] += [slug]
+            except KeyError:
+                result[provider] = [slug]
+        return result
+    
+    @computed_field
+    @property
+    def providers_and_models_dict(self)->dict:
+        result = dict()
+        for model in self.data:
+            provider, slug = model.id_.split("/")
+
+            try:
+                result[provider] += [model]
+            except KeyError:
+                result[provider] = [model]
+        return result
+    
+    def get_models_by_provider_dict(self,provider:str)->dict:
+        models = self.providers_and_models_dict[provider]
+        return {
+            model.id_.split("/")[1] : model
+            for model in models
+        }
+
+    
+    @computed_field
+    @property
+    def models_dict(self)->dict:
+        return {
+            model.id_: model
+            for model in self.data
+        }
+    
+    @computed_field
+    @property
+    def models_list(self)->list:
+        return [
+            model.id_
+            for model in self.data
+        ]
+    
+    @computed_field
+    @property
+    def providers_set(self)->set:
+        return {
+            model.id_.split("/")[0]
+            for model in self.data
+        }
 
 
 
 
 def test_no_validation_errors():
-    assert OpenRouterData.model_validate(OpenRouterData.get_openrouter_data())
+    assert OpenRouter.model_validate(OpenRouter.get_openrouter_data())
     pass
 
 if __name__ == '__main__':
