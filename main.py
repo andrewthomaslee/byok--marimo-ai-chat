@@ -42,7 +42,7 @@ def _(active_provider, get_active_provider, set_active_provider):
     div(
         bar,
         div(p(active_provider,klass="text-xs text-gray-500"),
-        klass="flex min-w-max h-10"
+        klass="flex min-w-max h-10 items-center justify-center"
         ),
         klass="flex flex-col border-2 w-18 p-3 m-3 rounded-xl items-center justify-center bg-gray-900"
     )
