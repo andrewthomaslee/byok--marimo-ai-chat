@@ -10,10 +10,10 @@ def sidebar_item(icon:ICONS,on_change:Callable[[Any],None],active:bool=False,too
 
     if active:
         style = "sidebar-icon-active"
+        icon = str(div(mo.icon(icon,size=23).text,span("",klass="sidebar-indicator"),klass=style))
     else:
         style = "sidebar-icon"
-        
-    icon = str(div(mo.icon(icon,size=23).text,klass=style))
+        icon = str(div(mo.icon(icon,size=23).text,klass=style))
     
     return div(
         mo.ui.run_button(

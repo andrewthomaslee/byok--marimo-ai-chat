@@ -33,6 +33,11 @@
                 cursor-pointer;
     }
 
+    .sidebar-indicator {
+        @apply  absolute bg-gray-500 h-10 w-1 rounded-br-full rounded-tr-full right-14;
+
+    }
+
     .sidebar-tooltip {
         @apply  absolute w-auto p-2 m-2 min-w-max left-14
                 rounded-md shadow-md text-white bg-gray-900
