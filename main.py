@@ -52,6 +52,12 @@ def _(active_provider, get_active_provider, set_active_provider):
 
 
 @app.cell
+def _(choose_a_model):
+    choose_a_model
+    return
+
+
+@app.cell
 def _():
     openrouter_data = OpenRouter.model_validate(OpenRouter.get_openrouter_data())
     return (openrouter_data,)
@@ -69,12 +75,6 @@ def _(model_dropdown, provider_dropdown):
     """
     )
     return (choose_a_model,)
-
-
-@app.cell
-def _(choose_a_model):
-    choose_a_model
-    return
 
 
 @app.cell
