@@ -1,12 +1,12 @@
 import marimo
 
-__generated_with = "0.13.15"
+__generated_with = "0.14.0"
 app = marimo.App(width="medium", css_file="./static/output.css")
 
 with app.setup:
     # Initialization code that runs before all other cells
     import marimo as mo
-    from elms import sidebar_item, openrouter_logo
+    from elms import sidebar_item
     from mohtml import div,p,span,img
     from models import ICONS
     from funcs import extract_icon_name
@@ -21,7 +21,7 @@ def _():
 
 @app.cell
 def _(get_active_provider):
-    active_provider = "" if get_active_provider() is None else extract_icon_name(get_active_provider())
+    active_provider = "" if get_active_provider() is None else get_active_provider()
     return (active_provider,)
 
 
@@ -29,10 +29,10 @@ def _(get_active_provider):
 def _(active_provider, get_active_provider, set_active_provider):
     buttons = \
     [
-        sidebar_item(icon,on_change=lambda v, i=icon: set_active_provider(i))
-        if get_active_provider() != icon
-        else sidebar_item(icon,on_change=lambda v, i=icon: set_active_provider(i),active=True)
-        for icon in ICONS.list_providers()
+        sidebar_item(icon,on_change=lambda v, s=slug: set_active_provider(s))
+        if get_active_provider() != slug
+        else sidebar_item(icon,on_change=lambda v, s=slug: set_active_provider(s),active=True)
+        for slug,icon in ICONS.connections_dict().items()
     ]
 
     bar = mo.vstack(
@@ -78,16 +78,18 @@ def _(choose_a_model):
 
 
 @app.cell
-def _(provider_dropdown):
-    provider_dropdown.value
-    return
-
-
-@app.cell
-def _(model_dropdown):
+def _(model_dropdown, provider_dropdown):
     mo.stop(model_dropdown.value is None)
-    print(model_dropdown.value)
-    print(model_dropdown.value.pricing)
+    mo.md(
+        f"""
+        Provider:
+        {provider_dropdown.value}\n
+        Model:
+        {model_dropdown.value.description}\n
+        Pricing:
+        {model_dropdown.value.pricing}\n
+        """
+    )
     return
 
 
@@ -118,13 +120,7 @@ def _(openrouter_data, provider_dropdown):
 
 @app.cell
 def _():
-    openrouter_svg = openrouter_logo(width=25,height=25)
-    return (openrouter_svg,)
-
-
-@app.cell
-def _(openrouter_svg):
-    div(openrouter_svg,klass="sidebar-icon")
+    ICONS.show_all_icons()
     return
 
 

@@ -61,11 +61,19 @@ fastapi dev main.py
 ### .bash_aliases
 Add these to your `.bashrc` or `.bash_aliases` file to make life easier
 ```sh
-#TailwindCSS
+#Dev Commands
+## TailwindCSS
 alias tw-dl="curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64 && chmod +x tailwindcss-linux-x64 && mv tailwindcss-linux-x64 tailwindcss"
 alias tw-init="mkdir static && touch static/input.css && echo '@import \"tailwindcss\";' >> static/input.css"
 alias tw-watch="./tailwindcss -i ./static/input.css -o ./static/output.css --watch"
 alias tw-minify="./tailwindcss -i ./static/input.css -o ./static/output.css --minify"
+## marimo
+## mo-edit
+alias mo-edit-main="marimo edit main.py --watch --no-token"
+alias mo-edit-app="marimo edit app.py --watch --no-token"
+## mo-run
+alias mo-run-main="marimo run main.py --watch --no-token"
+alias mo-run-app="marimo run app.py --watch --no-token"
 ```
 
 ### useful commands

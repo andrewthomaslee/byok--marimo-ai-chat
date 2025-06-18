@@ -9,5 +9,6 @@ dependencies = [
     "marimo[recommended]>=0.14.0",
     "mohtml>=0.1.10",
     "python-lsp-server>=1.12.2",
+    "requests>=2.32.4",
     "websockets>=15.0.1",
 ]
