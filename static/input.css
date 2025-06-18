@@ -9,6 +9,10 @@
     --color-gray-700: oklch(0.344 0.0112 264.42);
     --color-gray-800: oklch(0.3131 0.0093 268.37);
     --color-gray-900: oklch(0.2511 0.0064 258.36);
+
+    --color-genoa: oklch(0.5007 0.0849 175.43);
+    --color-shark: oklch(0.2411 0.0097 248.23);
+    --color-morningglory: oklch(0.8568 0.072 178.17);
 }
 
 @layer components {
