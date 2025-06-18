@@ -6,8 +6,8 @@ app = marimo.App(width="medium", css_file="./static/output.css")
 with app.setup:
     # Initialization code that runs before all other cells
     import marimo as mo
-    from elms import sidebar_item
-    from mohtml import div,p,span
+    from elms import sidebar_item, openrouter_logo
+    from mohtml import div,p,span,img
     from models import ICONS
     from funcs import extract_icon_name
     from OpenRouter import OpenRouter
@@ -34,6 +34,7 @@ def _(active_provider, get_active_provider, set_active_provider):
         else sidebar_item(icon,on_change=lambda v, i=icon: set_active_provider(i),active=True)
         for icon in ICONS.list_providers()
     ]
+
     bar = mo.vstack(
         buttons,
         align="center",
@@ -113,6 +114,18 @@ def _(openrouter_data, provider_dropdown):
             searchable=True,
         )
     return (model_dropdown,)
+
+
+@app.cell
+def _():
+    openrouter_svg = openrouter_logo(width=25,height=25)
+    return (openrouter_svg,)
+
+
+@app.cell
+def _(openrouter_svg):
+    div(openrouter_svg,klass="sidebar-icon")
+    return
 
 
 if __name__ == "__main__":
