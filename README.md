@@ -18,7 +18,7 @@ Create *views* and *plots* and *routes* and *widgets* and see how they will nati
 Dont like browser IDE? Since **marimo** is just a `.py` file, any IDE will do.
 
 # Why marimo + Tailwind-CLI ?
-I don't want a `package.json` file and a `node_modules` directory if the only package is for TailwindCSS. Using the standalone CLI is a much cleaner **feeling**. The vibes are right with just "**marimo**🟢 + **TailwindCSS CLI**🌀 + **FastAPI**🐍"
+I don't want a `package.json` file and a `node_modules` directory if the only package is for `TailwindCSS`. Using the standalone CLI is a much cleaner **feeling**. The vibes are right with just "**marimo**🟢 + **TailwindCSS CLI**🌀 + **Datastar**🚀 + **FastAPI**🐍(for more complex apps)"
 
 **marimo** encourages <u>functional programming</u> for maximal reusability. I enjoy programming in **cells** rather that **files**. But it is nice to have both options with **marimo**.
 
@@ -67,8 +67,8 @@ uv sync
 # Activate the enviroment
 source .venv/bin/activate
 
-# Use FastAPI dev
-fastapi dev main.py
+# Use marimo's browser editor
+marimo edit main.py --watch
 ```
 
 ### .bash_aliases
