@@ -24,6 +24,19 @@ I don't want a `package.json` file and a `node_modules` directory if the only pa
 
 I can rapidly design a marimo page from my browser and add it as a route to FastAPI in no time! The work flow is sick. Not perfect, but at the time of writing this marimo is only at version `0.13.15` and it's already this damn good!
 
+
+## Docker
+To launch with docker:
+```sh
+docker compose up --build
+```
+or
+```sh
+docker build -t ai-providers:latest . && \
+docker run -p 8000:8000 --name ai-providers-container -d ai-providers:latest
+```
+
+
 ## TailwindCSS CLI Standalone (no-npm)
 To install it, grab the executable for your platform from the [latest release](https://github.com/tailwindlabs/tailwindcss/releases/latest) on GitHub, making sure to give it executable permissions:
 
