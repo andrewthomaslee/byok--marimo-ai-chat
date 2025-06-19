@@ -61,7 +61,7 @@ fastapi dev main.py
 ### .bash_aliases
 Add these to your `.bashrc` or `.bash_aliases` file to make life easier
 ```sh
-#Dev Commands
+# Dev Commands
 ## TailwindCSS
 alias tw-dl="curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64 && chmod +x tailwindcss-linux-x64 && mv tailwindcss-linux-x64 tailwindcss"
 alias tw-init="mkdir static && touch static/input.css && echo '@import \"tailwindcss\";' >> static/input.css"
@@ -74,12 +74,13 @@ alias mo-edit-app="marimo edit app.py --watch --no-token"
 ## mo-run
 alias mo-run-main="marimo run main.py --watch --no-token"
 alias mo-run-app="marimo run app.py --watch --no-token"
-```
-
-### useful commands
-To edit a marimo notebook in browser and in IDE at the same time add these flags:
-```sh
-marimo edit app.py --no-token --watch
+# UV
+alias uv-update-self="uv self update"
+alias uv-update-lock="uv lock --upgrade"
+alias uv-update-pip="uv pip update"
+# Docker
+alias mo-docker-build="docker build -t marimo-app:latest ."
+alias mo-docker-run="docker run -p 8000:8000 --name marimo-app-container marimo-app:latest"
 ```
 
 ### VSCode intellisense inside `.py` files

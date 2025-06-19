@@ -1,0 +1,33 @@
+networks:
+  default:
+    driver: bridge
+
+services:
+  marimo:
+    build: .
+    ports:
+      - '8000:8000'
+    container_name: marimo-app-container
+    networks:
+      - default
+    volumes:
+      - 'marimo-volume:/app'
+    restart: unless-stopped
+    environment:
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - XAI_API_KEY=${XAI_API_KEY}
+      - BEDROCK_API_KEY=${BEDROCK_API_KEY}
+      - META_API_KEY=${META_API_KEY}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      start_period: 30s
+      interval: 30s
+      retries: 5
+      timeout: 3s
+
+volumes:
+  marimo-volume:
+    name: marimo-volume

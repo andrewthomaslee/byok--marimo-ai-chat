@@ -1,0 +1,20 @@
+#env
+.env
+
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# marimo
+__marimo__/
+
+# TailwindCSS
+tailwindcss
+output.css
