@@ -165,3 +165,4 @@ class ICONS(StrEnum):
 
 if __name__ == "__main__":
     assert isinstance(ICONS.DISCORD.value,str)
+    assert isinstance(ICONS.DISCORD,StrEnum)
