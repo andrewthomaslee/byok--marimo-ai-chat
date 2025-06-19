@@ -79,10 +79,10 @@ alias uv-update-self="uv self update"
 alias uv-update-lock="uv lock --upgrade"
 alias uv-update-pip="uv pip update"
 # Docker
-alias mo-docker-build="docker build -t ai-providers:latest ."
-alias mo-docker-run="docker run -p 8000:8000 --name ai-providers-container ai-providers:latest"
-alias compose-up="docker compose up -d --build"
-alias compose-down="docker compose down"
+alias do-build-mo="docker build -t ai-providers:latest ."
+alias do-run-mo="docker run -p 8000:8000 --name ai-providers-container -d ai-providers:latest"
+alias do-compose-up="docker compose up --build"
+alias do-compose-down="docker compose down"
 ```
 
 ### VSCode intellisense inside `.py` files
