@@ -1,5 +1,7 @@
 #env
 .env
+.git
+.gitignore
 
 # Python-generated files
 __pycache__/

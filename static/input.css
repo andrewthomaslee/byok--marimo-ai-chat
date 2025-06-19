@@ -38,7 +38,7 @@
     }
 
     .sidebar-indicator {
-        @apply  absolute bg-gray-500 h-10 w-1 rounded-br-full rounded-tr-full right-14;
+        @apply  absolute bg-gray-600 h-9 w-1 rounded-r-full right-13.5;
 
     }
 

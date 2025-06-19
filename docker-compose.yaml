@@ -5,13 +5,14 @@ networks:
 services:
   marimo:
     build: .
+    image: byok:latest
     ports:
-      - '8000:8000'
+      - 8000:8000
     container_name: marimo-app-container
     networks:
       - default
     volumes:
-      - 'marimo-volume:/app'
+      - marimo-app-volume:/app
     restart: unless-stopped
     environment:
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
@@ -30,4 +31,4 @@ services:
 
 volumes:
   marimo-volume:
-    name: marimo-volume
+    name: marimo-app-volume

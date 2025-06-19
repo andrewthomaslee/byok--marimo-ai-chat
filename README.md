@@ -81,6 +81,8 @@ alias uv-update-pip="uv pip update"
 # Docker
 alias mo-docker-build="docker build -t marimo-app:latest ."
 alias mo-docker-run="docker run -p 8000:8000 --name marimo-app-container marimo-app:latest"
+alias compose-up="docker compose up -d --build"
+alias compose-down="docker compose down"
 ```
 
 ### VSCode intellisense inside `.py` files
