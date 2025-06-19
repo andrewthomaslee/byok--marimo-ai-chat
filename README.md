@@ -79,8 +79,8 @@ alias uv-update-self="uv self update"
 alias uv-update-lock="uv lock --upgrade"
 alias uv-update-pip="uv pip update"
 # Docker
-alias mo-docker-build="docker build -t marimo-app:latest ."
-alias mo-docker-run="docker run -p 8000:8000 --name marimo-app-container marimo-app:latest"
+alias mo-docker-build="docker build -t ai-providers:latest ."
+alias mo-docker-run="docker run -p 8000:8000 --name ai-providers-container ai-providers:latest"
 alias compose-up="docker compose up -d --build"
 alias compose-down="docker compose down"
 ```
@@ -90,6 +90,15 @@ Use [tailwindcss.includelanguages](https://marketplace.visualstudio.com/items?it
 Add this to your settings via ui or json.
 ```json
 {
+  "tailwindCSS.classAttributes": [
+      "class",
+      "className",
+      "ngClass",
+      "class:list",
+      "klass",
+      "style",
+      "_style"
+  ],
   "tailwindCSS.includeLanguages": {
     "python": "html"
   }

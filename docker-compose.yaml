@@ -5,14 +5,14 @@ networks:
 services:
   marimo:
     build: .
-    image: byok:latest
+    image: ai-providers:latest
     ports:
       - 8000:8000
-    container_name: marimo-app-container
+    container_name: ai-providers-container
     networks:
       - default
     volumes:
-      - marimo-app-volume:/app
+      - ai-providers-volume:/app
     restart: unless-stopped
     environment:
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
@@ -30,5 +30,5 @@ services:
       timeout: 3s
 
 volumes:
-  marimo-volume:
-    name: marimo-app-volume
+  ai-providers-volume:
+    name: ai-providers-volume
