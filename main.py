@@ -68,8 +68,8 @@ def _(active_provider, get_active_provider, set_active_provider):
 
 
 @app.cell
-def _(active_provider, buttons):
-    connections_sidebar_elm(active_connection=active_provider,sidebar_buttons=tuple(buttons))
+def _(buttons):
+    connections_sidebar_elm(sidebar_buttons=tuple(buttons))
     return
 
 
