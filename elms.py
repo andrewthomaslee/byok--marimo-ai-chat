@@ -3,6 +3,7 @@ from mohtml import div,p,a,h1,h2,h3,script,form,button,span
 from pydantic import validate_call, Field, ValidationError, BaseModel
 from typing import Annotated, Callable, Any
 from models import ICONS
+from OpenRouter import OpenRouter
 
 
 @validate_call
@@ -40,3 +41,21 @@ def sidebar_item(icon:ICONS,on_change:Callable[[Any],None],active:bool=False,too
         )
 
 
+@validate_call
+def openrouter_connection_bar(data:OpenRouter,active_provider:str|None)->div:
+
+    if active_provider is None:
+        providers_dropdown = mo.ui.dropdown(options=data.providers_set,searchable=True)
+        model_dropdown = mo.ui.dropdown(options=openrouter_data.models_dict,searchable=True)
+    elif isinstance(active_provider,str):
+        if active_provider not in data.providers_set:
+            raise ValueError("active_provider no in providers_set")
+        
+        active_provider = active_provider.casefold()
+        providers_dropdown = mo.ui.dropdown(options=data.providers_set,searchable=True,value=active_provider)
+        model_dropdown = mo.ui.dropdown(options=data.get_models_by_a_provider_dict(active_provider),searchable=True)
+    else:
+        print("something wong")
+
+
+    return div(*["Provider: ",providers_dropdown,"Models: ",model_dropdown],klass="flex bg-gray-900 w-fit justify-center items-center rounded-3xl border-2 border-solid px-5 py-1 m-auto")

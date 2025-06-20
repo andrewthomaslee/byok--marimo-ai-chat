@@ -1,7 +1,11 @@
 import marimo
 
 __generated_with = "0.14.0"
-app = marimo.App(width="full", css_file="./static/output.css")
+app = marimo.App(
+    width="full",
+    app_title="AI-Pro",
+    css_file="./static/output.css",
+)
 
 with app.setup:
     # Initialization code that runs before all other cells
@@ -9,7 +13,7 @@ with app.setup:
     from elms import sidebar_item
     from mohtml import div,p,span,img
     from models import ICONS
-    from funcs import extract_icon_name
+    from funcs import pick_a_connection
     from OpenRouter import OpenRouter
 
 
@@ -96,7 +100,7 @@ def _(model_dropdown, provider_dropdown):
 @app.cell
 def _(openrouter_data):
     provider_dropdown = mo.ui.dropdown(
-        options=openrouter_data.providers_set,
+        options=openrouter_data.providers_tuple,
         searchable=True,
     )
     return (provider_dropdown,)
@@ -107,7 +111,7 @@ def _(openrouter_data, provider_dropdown):
     picked_provider = provider_dropdown.value
     try:
         model_dropdown = mo.ui.dropdown(
-            options=openrouter_data.get_models_by_provider_dict(picked_provider),
+            options=openrouter_data.get_models_by_a_provider_dict(picked_provider),
             searchable=True,
         )
     except KeyError:
@@ -116,12 +120,6 @@ def _(openrouter_data, provider_dropdown):
             searchable=True,
         )
     return (model_dropdown,)
-
-
-@app.cell
-def _():
-    ICONS.show_all_icons()
-    return
 
 
 if __name__ == "__main__":

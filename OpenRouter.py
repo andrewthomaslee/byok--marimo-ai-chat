@@ -50,10 +50,12 @@ class OpenRouterModel(BaseModel):
 
 
 class OpenRouter(BaseModel):
+    '''
+    Pydantic model to consume the OpenRouter /models API.
+    '''
     model_config = ConfigDict(frozen=True)
 
     data: list[OpenRouterModel] = Field(description="List of available models")
-    base_url: str = "https://openrouter.ai/api/v1/"
 
     @classmethod
     def get_openrouter_data(self,headers:dict=None):
@@ -69,6 +71,10 @@ class OpenRouter(BaseModel):
 
         return response.json()
     
+    @property
+    def base_url(self):
+        return "https://openrouter.ai/api/v1/"
+
     @computed_field
     @property
     def names_of_providers_and_slugs_dict(self)->dict:
@@ -95,14 +101,14 @@ class OpenRouter(BaseModel):
                 result[provider] = [model]
         return result
     
-    def get_models_by_provider_dict(self,provider:str)->dict:
+
+    def get_models_by_a_provider_dict(self,provider:str)->dict:
         models = self.providers_and_models_dict[provider]
         return {
             model.id_.split("/")[1] : model
             for model in models
         }
 
-    
     @computed_field
     @property
     def models_dict(self)->dict:
@@ -113,19 +119,22 @@ class OpenRouter(BaseModel):
     
     @computed_field
     @property
-    def models_list(self)->list:
-        return [
+    def models_tuple(self)->list:
+        return tuple([
             model.id_
             for model in self.data
-        ]
+        ])
     
     @computed_field
     @property
-    def providers_set(self)->set:
-        return {
-            model.id_.split("/")[0]
+    def providers_tuple(self)->tuple:
+        _set = {
+            model.id_.split("/",1)[0].casefold()
             for model in self.data
         }
+        ordered = list(_set)
+        ordered.sort()
+        return tuple(ordered)
 
 
 
