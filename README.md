@@ -32,8 +32,8 @@ docker compose up --build
 ```
 or
 ```sh
-docker build -t ai-providers:latest . && \
-docker run -p 8000:8000 --name ai-providers-container -d ai-providers:latest
+docker build -t frfropenai:latest . && \
+docker run -p 8000:8000 --name frfropenai-container -d frfropenai:latest
 ```
 
 
@@ -92,8 +92,8 @@ alias uv-update-self="uv self update"
 alias uv-update-lock="uv lock --upgrade"
 alias uv-update-pip="uv pip update"
 # Docker
-alias do-build-mo="docker build -t ai-providers:latest ."
-alias do-run-mo="docker run -p 8000:8000 --name ai-providers-container -d ai-providers:latest"
+alias do-build-mo="docker build -t frfropenai:latest ."
+alias do-run-mo="docker run -p 8000:8000 --name frfropenai-container -d frfropenai:latest"
 alias do-compose-up="docker compose up --build"
 alias do-compose-down="docker compose down"
 ```
