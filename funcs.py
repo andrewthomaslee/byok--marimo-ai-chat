@@ -46,3 +46,13 @@ def pick_a_connection(connection:str|None)->div|None:
             pass
 
     return None
+
+@validate_call
+def sort_this_dict(d:dict,*,kwargs:dict=None)->dict:
+    """
+    Sorts a dictionary alphabetically by default.
+    Args:
+        d (dict): dict to sort
+        kwargs (dict): Passed to the sorted() function. Options are `key=Callable` and `reverse=bool`
+    """
+    return dict(sorted(d.items(),**kwargs)) if kwargs is not None else dict(sorted(d.items()))

@@ -8,7 +8,8 @@ with app.setup:
     import marimo as mo
     from mohtml import div,span,script,p
     from OpenRouter import OpenRouter
-    from elms import openrouter_connection_bar
+    from elms import openrouter_connection_bar,openrouter_provider_dropdown,openrouter_models_dropdown, connection_button_elm, connection_buttons_tuple, connections_sidebar_elm
+    from models import ICONS
 
 
 @app.cell
@@ -19,22 +20,94 @@ def _():
 
 @app.cell
 def _(data):
-    data.base_url
+    try:
+        provider_picker = openrouter_provider_dropdown(data)
+    except Exception:
+        pass
+    return (provider_picker,)
+
+
+@app.cell
+def _(data, provider_picker):
+    models_picker = openrouter_models_dropdown(data,provider_picker.value)
+    return (models_picker,)
+
+
+@app.cell
+def _(models_picker, provider_picker):
+    openrouter_connection_bar(provider_picker,models_picker)
     return
 
 
 @app.cell
-def _():
-    div(
-        "test",
-        klass="flex bg-gray-900 w-fit justify-center items-center rounded-3xl border-2 border-solid px-5 py-1 m-auto"
-    )
+def _(models_picker):
+    models_picker.value
     return
 
 
 @app.cell
 def _(data):
-    data.providers_tuple
+    data.models_tuple
+    return
+
+
+@app.cell
+def _():
+    button = connection_button_elm(ICONS.DISCORD,kwargs={"on_change":lambda _:print("Hello"),"on_click":lambda _:print("Goodbye")})
+    return (button,)
+
+
+@app.function
+def run_this(_):
+    print("this ran")
+
+
+@app.cell
+def _(button):
+    button
+    return
+
+
+@app.cell
+def _():
+    getter,setter=mo.state(None)
+    return getter, setter
+
+
+@app.cell
+def _():
+    ICONS.connections_dict()
+    return
+
+
+@app.cell
+def _(active_connection, setter):
+    button_tuple = connection_buttons_tuple(active_connection,ICONS.connections_dict(),setter)
+    return (button_tuple,)
+
+
+@app.cell
+def _(button_tuple):
+    connections_sidebar_elm(button_tuple)
+    return
+
+
+@app.cell
+def _(getter):
+    getter()
+    return
+
+
+@app.cell
+def _(getter):
+    active_connection = getter()
+    return (active_connection,)
+
+
+@app.cell
+def _(button_tuple):
+    button_stack = mo.vstack(button_tuple,align="center",justify="center")
+    button_stack
     return
 
 

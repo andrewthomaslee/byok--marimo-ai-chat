@@ -1,13 +1,14 @@
 import requests
 from functools import lru_cache
 from pydantic import BaseModel, ConfigDict, Field, field_validator, ValidationError, computed_field
+from collections import defaultdict
 
 
 class Architecture(BaseModel):
     model_config = ConfigDict(frozen=True)
 
-    input_modalities: list[str] = Field(description="Supported input types")
-    output_modalities: list[str] = Field(description="Supported output types")
+    input_modalities: tuple[str,...] = Field(description="Supported input types")
+    output_modalities: tuple[str,...] = Field(description="Supported output types")
     tokenizer: str = Field(description="Tokenization method used")
     instruct_type: str | None = Field(description="instruct_type")
 
@@ -46,7 +47,7 @@ class OpenRouterModel(BaseModel):
     pricing : Pricing
     top_provider : TopProvider
     per_request_limits: int | None = Field(description="Rate limiting information (null if no limits)")
-    supported_parameters: list[str] = Field(description="Array of supported API parameters for this model")
+    supported_parameters: tuple[str,...] = Field(description="Array of supported API parameters for this model")
 
 
 class OpenRouter(BaseModel):
@@ -55,7 +56,7 @@ class OpenRouter(BaseModel):
     '''
     model_config = ConfigDict(frozen=True)
 
-    data: list[OpenRouterModel] = Field(description="List of available models")
+    data: tuple[OpenRouterModel,...] = Field(description="List of available models")
 
     @classmethod
     def get_openrouter_data(self,headers:dict=None):
@@ -63,83 +64,113 @@ class OpenRouter(BaseModel):
         List available models (GET /models)
         """
         _headers = {} if headers is None else headers
-        response = requests.get(
-          "https://openrouter.ai/api/v1/models",
-          headers=_headers,
-        )
-        response.raise_for_status()
+        try:
+            response = requests.get(
+            "https://openrouter.ai/api/v1/models",
+            headers=_headers,
+            )
+            response.raise_for_status()
+            return response.json()
+# Catch OpenRouter connection issues
+        except requests.RequestException as e:
+            print(f"An error occurred while fetching data from OpenRouter:\n{e}")
+            raise
 
-        return response.json()
+        
     
     @property
     def base_url(self):
         return "https://openrouter.ai/api/v1/"
 
-    @computed_field
-    @property
-    def names_of_providers_and_slugs_dict(self)->dict:
-        result = dict()
-        for model in self.data:
-            provider, slug = model.id_.split("/")
-
-            try:
-                result[provider] += [slug]
-            except KeyError:
-                result[provider] = [slug]
-        return result
     
     @computed_field
     @property
     def providers_and_models_dict(self)->dict:
-        result = dict()
+        """
+        A dict where keys are provider slug and values are `OpenRouterModel` pydantic models stored in a tuple
+        """
+        result = defaultdict(list)
         for model in self.data:
-            provider, slug = model.id_.split("/")
-
-            try:
-                result[provider] += [model]
-            except KeyError:
-                result[provider] = [model]
-        return result
-    
-
-    def get_models_by_a_provider_dict(self,provider:str)->dict:
-        models = self.providers_and_models_dict[provider]
-        return {
-            model.id_.split("/")[1] : model
-            for model in models
+# Seperate Provider/Slug from id
+            provider = model.id_.split("/")[0].casefold()
+# Append every model that belongs to a certain provider
+            result[provider].append(model)
+# Make model list immutable
+        result = {
+            k:tuple(v)
+            for k,v in result.items()
         }
+# Sorting by key 
+        return dict(sorted(result.items()))
+
+
+
+    @lru_cache(maxsize=16)
+    def get_models_by_a_provider_dict(self,provider:str)->dict:
+        """
+        Get a dict where keys are `model slug` and values are `OpenRouterModel` pydantic model
+        Args:
+            provider (str): A string for provider, must be in providers_and_models_dict.keys() to pass
+        """
+# Catch KeyError for provider not being in providers_and_models_dict.keys()
+        try:
+            _models = self.providers_and_models_dict[provider]
+        except KeyError:
+            raise KeyError("Provider not in providers_and_models_dict.keys()")
+# Make a dict of `model slug` : `OpenRouterModel` pydantic model
+        result = {
+            model.id_.split("/")[1].casefold() : model
+            for model in _models
+        }
+# Sort by keys
+        return dict(sorted(result.items(),reverse=True))
 
     @computed_field
     @property
     def models_dict(self)->dict:
-        return {
-            model.id_: model
+        """
+        Dict of `model id` : `OpenRouterModel` pydantic model
+        """
+        result = {
+            model.id_.casefold(): model
             for model in self.data
         }
+# Sort by keys
+        return dict(sorted(result.items()))
     
     @computed_field
     @property
-    def models_tuple(self)->list:
-        return tuple([
-            model.id_
+    def models_tuple(self)->tuple:
+        """
+        Tuple of all models
+        """
+        _models = [
+            model.id_.casefold()
             for model in self.data
-        ])
+        ]
+# Sort by keys
+        return tuple(sorted(_models))
     
     @computed_field
     @property
     def providers_tuple(self)->tuple:
+        """
+        Tuple of all unique providers
+        """
         _set = {
             model.id_.split("/",1)[0].casefold()
             for model in self.data
         }
-        ordered = list(_set)
-        ordered.sort()
-        return tuple(ordered)
+# Sort by keys
+        return tuple(sorted(list(_set)))
 
 
 
 
 def test_no_validation_errors():
+    """
+    Check that Pydantic model has no validation errors
+    """
     assert OpenRouter.model_validate(OpenRouter.get_openrouter_data())
     pass
 

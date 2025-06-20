@@ -3,14 +3,14 @@ import marimo
 __generated_with = "0.14.0"
 app = marimo.App(
     width="full",
-    app_title="AI-Pro",
+    app_title="frfropen.ai",
     css_file="./static/output.css",
 )
 
 with app.setup:
     # Initialization code that runs before all other cells
     import marimo as mo
-    from elms import sidebar_item
+    from elms import sidebar_item, openrouter_connection_bar, connections_sidebar_elm, connection_button_elm
     from mohtml import div,p,span,img
     from models import ICONS
     from funcs import pick_a_connection
@@ -25,7 +25,19 @@ def _():
 
 @app.cell
 def _(get_active_provider):
-    active_provider = "" if get_active_provider() is None else get_active_provider()
+    type(get_active_provider)
+    return
+
+
+@app.cell
+def _(set_active_provider):
+    type(set_active_provider)
+    return
+
+
+@app.cell
+def _(get_active_provider):
+    active_provider = get_active_provider()
     return (active_provider,)
 
 
@@ -52,6 +64,12 @@ def _(active_provider, get_active_provider, set_active_provider):
         ),
         klass="flex flex-col border-2 w-18 p-3 m-3 rounded-xl items-center justify-center bg-gray-900"
     )
+    return (buttons,)
+
+
+@app.cell
+def _(active_provider, buttons):
+    connections_sidebar_elm(active_connection=active_provider,sidebar_buttons=tuple(buttons))
     return
 
 
