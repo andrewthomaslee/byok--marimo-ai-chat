@@ -1,6 +1,6 @@
 import marimo as mo
 from pydantic import validate_call
-from models import ICONS
+from models import ICONS,ACTIVECONNECTION
 from mohtml import script,div
 
 
@@ -24,28 +24,6 @@ def datastar_cdn(version:str="v1.0.0-beta.11")->script:
         crossorigin="anonymous"
     )
 
-@validate_call
-def pick_a_connection(connection:str|None)->div|None:
-    if connection is None:
-        return None
-
-    match connection.casefold():
-        case "openrouter":
-            print("openrouter")
-        case "openai":
-            print("openai")
-        case "anthropic":
-            print("anthropic")
-        case "google":
-            print("google")
-        case "x-ai":
-            print("x-ai")
-        case "bedrock":
-            print("bedrock")
-        case _:
-            pass
-
-    return None
 
 @validate_call
 def sort_this_dict(d:dict,**kwargs:str)->dict:

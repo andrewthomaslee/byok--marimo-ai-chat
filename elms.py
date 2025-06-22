@@ -7,7 +7,7 @@ from OpenRouter import OpenRouter
 
 
 @validate_call(validate_return=True,config=ConfigDict(arbitrary_types_allowed=True,strict=True))
-def connection_button_elm(icon: div,active:bool=False,*,kwargs:dict):
+def connection_button(icon: div,active:bool=False,*,kwargs:dict):
     """
     Create a discord styled button to fit inside the `connections_sidebar_elm` as a `mo.vstack`.
     Args:
@@ -43,9 +43,9 @@ def connection_buttons_tuple(active_connection:ACTIVECONNECTION,connection_sette
     # List of connection_button_elm() while checking for the active_connection against the icon name found in ICONS.connections_dict()
     buttons = \
     [
-        connection_button_elm(member.icon(),True,kwargs={"tooltip":member.value,"on_click":lambda _,m=member:connection_setter(m)})
+        connection_button(member.icon(),True,kwargs={"tooltip":member.value,"on_click":lambda _,m=member:connection_setter(m)})
         if active_connection is member
-        else connection_button_elm(member.icon(),kwargs={"tooltip":member.value,"on_click":lambda _,m=member:connection_setter(m)})
+        else connection_button(member.icon(),kwargs={"tooltip":member.value,"on_click":lambda _,m=member:connection_setter(m)})
         for member in ACTIVECONNECTION
     ]
     # Tuple for immutable
@@ -53,7 +53,7 @@ def connection_buttons_tuple(active_connection:ACTIVECONNECTION,connection_sette
 
 
 @validate_call(validate_return=True,config=ConfigDict(arbitrary_types_allowed=True,strict=True))
-def connections_sidebar_elm(sidebar_buttons:tuple[div,...])->div:
+def connections_sidebar(sidebar_buttons:tuple[div,...])->div:
     """
     A Discord styled sidebar for choosing a active connection.
     Args:
@@ -69,11 +69,30 @@ def connections_sidebar_elm(sidebar_buttons:tuple[div,...])->div:
     )
 
 
+@validate_call
+def display_active_connection_ui(active_connection:ACTIVECONNECTION,elms_dict:dict)->div:
 
+    match active_connection:
+        case ACTIVECONNECTION.OPENROUTER:
+            return elms_dict[ACTIVECONNECTION.OPENROUTER]
+        case ACTIVECONNECTION.OPENAI:
+            print("openai")
+        case ACTIVECONNECTION.ANTHROPIC:
+            print("anthropic")
+        case ACTIVECONNECTION.GOOGLE:
+            print("google")
+        case ACTIVECONNECTION.XAI:
+            print("x-ai")
+        case ACTIVECONNECTION.BEDROCK:
+            print("bedrock")
+        case _:
+            pass
+
+    return None
 
 #<--------OPENROUTER ELMS----------->
 @validate_call
-def openrouter_connection_bar(providers_dropdown:mo.ui.dropdown,models_dropdown:mo.ui.dropdown)->div:
+def openrouter_model_picker_bar(providers_dropdown:mo.ui.dropdown,models_dropdown:mo.ui.dropdown)->div:
     style = "flex mx-2"
     elms = [
         "Provider:",
@@ -94,17 +113,17 @@ def openrouter_connection_bar(providers_dropdown:mo.ui.dropdown,models_dropdown:
 
 
 @validate_call
-def openrouter_provider_dropdown(data:OpenRouter,kwargs:dict=None)->mo.ui.dropdown:
+def openrouter_provider_dropdown(data:OpenRouter,**kwargs:Any)->mo.ui.dropdown:
     """
     Creates a dropdown menue for OpenRouter provider picking.
     Args:
         data (OpenRouter): OpenRouter pydantic model
         kwargs (Optional[dict]): Will be passed as kwargs to mo.ui.dropdown.
     """
-    return mo.ui.dropdown(options=data.providers_tuple,searchable=True) if kwargs is None else mo.ui.dropdown(options=data.providers_tuple,searchable=True,**kwargs)
+    return mo.ui.dropdown(options=data.providers_tuple,searchable=True,**kwargs)
 
 @validate_call
-def openrouter_models_dropdown(data:OpenRouter,active_provider:str|None,kwargs:dict=None)->mo.ui.dropdown:
+def openrouter_models_dropdown(data:OpenRouter,active_provider:str|None,**kwargs)->mo.ui.dropdown:
     """
     Creates a dropdown menue for OpenRouter model picking.
     Args:
@@ -114,10 +133,10 @@ def openrouter_models_dropdown(data:OpenRouter,active_provider:str|None,kwargs:d
     """
     if active_provider is None:
         _options = data.models_dict
-        return mo.ui.dropdown(options=_options,searchable=True) if kwargs is None else mo.ui.dropdown(options=_options,searchable=True,**kwargs)
+        return mo.ui.dropdown(options=_options,searchable=True,**kwargs)
     
     elif active_provider in data.providers_tuple:
         _options = data.get_models_by_a_provider_dict(active_provider)
-        return mo.ui.dropdown(options=_options,searchable=True) if kwargs is None else mo.ui.dropdown(options=_options,searchable=True,**kwargs)
+        return mo.ui.dropdown(options=_options,searchable=True,**kwargs)
     else:
         raise ValueError("Active Provider not in Providers Tuple")
