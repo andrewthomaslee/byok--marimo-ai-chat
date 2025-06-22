@@ -10,6 +10,7 @@ app = marimo.App(
 with app.setup:
     # Initialization code that runs before all other cells
     import marimo as mo
+    from mohtml import div
     from models import ICONS, ACTIVECONNECTION
     from elms import (
     connection_buttons_tuple,
@@ -49,14 +50,13 @@ def _(active_connection, active_connection_setter):
 @app.cell
 def _(connection_buttons):
     connections_sidebar_elm = connections_sidebar(connection_buttons)
-    connections_sidebar_elm
-    return
+    return (connections_sidebar_elm,)
 
 
 @app.cell
 def _(active_connection, dd):
-    display_active_connection_ui(active_connection,dd)
-    return
+    active_connection_ui = display_active_connection_ui(active_connection,dd)
+    return (active_connection_ui,)
 
 
 @app.cell
@@ -83,6 +83,16 @@ def _(openrouter_model_picker_bar_elm):
         ACTIVECONNECTION.OPENROUTER:openrouter_model_picker_bar_elm
     }
     return (dd,)
+
+
+@app.cell
+def _(active_connection_ui, connections_sidebar_elm):
+    mo.vstack(
+        [connections_sidebar_elm,active_connection_ui],
+        align="start",
+        justify="center"
+    )
+    return
 
 
 if __name__ == "__main__":

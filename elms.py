@@ -69,50 +69,52 @@ def connections_sidebar(sidebar_buttons:tuple[div,...])->div:
     )
 
 
-@validate_call
+@validate_call(validate_return=True,config=ConfigDict(arbitrary_types_allowed=True,strict=True))
 def display_active_connection_ui(active_connection:ACTIVECONNECTION,elms_dict:dict)->div:
 
     match active_connection:
         case ACTIVECONNECTION.OPENROUTER:
             return elms_dict[ACTIVECONNECTION.OPENROUTER]
         case ACTIVECONNECTION.OPENAI:
-            print("openai")
+            return div("OpenAI")
         case ACTIVECONNECTION.ANTHROPIC:
-            print("anthropic")
+            return div("Anthropic")
         case ACTIVECONNECTION.GOOGLE:
-            print("google")
+            return div("Google")
         case ACTIVECONNECTION.XAI:
-            print("x-ai")
+            return div("X-AI")
         case ACTIVECONNECTION.BEDROCK:
-            print("bedrock")
+            return div("Bedrock")
         case _:
-            pass
+            return div("")
 
     return None
 
 #<--------OPENROUTER ELMS----------->
-@validate_call
+@validate_call(validate_return=True,config=ConfigDict(arbitrary_types_allowed=True,strict=True))
 def openrouter_model_picker_bar(providers_dropdown:mo.ui.dropdown,models_dropdown:mo.ui.dropdown)->div:
-    style = "flex mx-2"
-    elms = [
-        "Provider:",
-        div(
-            providers_dropdown,
-            klass=style
-        ),
-        "Model:",
-        div(
-            models_dropdown,
-            klass=style
-        )
-    ]
+    style = "flex text-gray-400 max-w-fit max-h-fit"
+    elms = mo.vstack([
+        mo.hstack([
+            div("Provider",
+                klass=style
+            ),
+            providers_dropdown
+        ]),
+        mo.hstack([
+            div("Model",
+                klass=style
+            ),
+            models_dropdown
+        ])
+    ])
     return div(
-        *elms,
-        klass="flex bg-gray-900 w-fit justify-center items-center rounded-3xl border-2 border-solid px-5 py-1.5 m-auto"
+        elms,
+        klass="flex flex-col bg-gray-900 w-fit justify-center items-start rounded-xl border-2 border-solid px-1.5 py-1.5 h-fit ml-2"
     )
 
 
-@validate_call
+@validate_call(validate_return=True,config=ConfigDict(arbitrary_types_allowed=True,strict=True))
 def openrouter_provider_dropdown(data:OpenRouter,**kwargs:Any)->mo.ui.dropdown:
     """
     Creates a dropdown menue for OpenRouter provider picking.
@@ -122,7 +124,7 @@ def openrouter_provider_dropdown(data:OpenRouter,**kwargs:Any)->mo.ui.dropdown:
     """
     return mo.ui.dropdown(options=data.providers_tuple,searchable=True,**kwargs)
 
-@validate_call
+@validate_call(validate_return=True,config=ConfigDict(arbitrary_types_allowed=True,strict=True))
 def openrouter_models_dropdown(data:OpenRouter,active_provider:str|None,**kwargs)->mo.ui.dropdown:
     """
     Creates a dropdown menue for OpenRouter model picking.
