@@ -12,7 +12,7 @@ services:
     networks:
       - default
     volumes:
-      - ai-providers-volume:/app
+      - ai-providers-volume:/app/storage
     restart: unless-stopped
     environment:
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}

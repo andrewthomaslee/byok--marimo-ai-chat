@@ -48,7 +48,7 @@ def pick_a_connection(connection:str|None)->div|None:
     return None
 
 @validate_call
-def sort_this_dict(d:dict,*,kwargs:dict=None)->dict:
+def sort_this_dict(d:dict,**kwargs:str)->dict:
     """
     Sorts a dictionary alphabetically by default.
     Args:
