@@ -99,13 +99,17 @@ def openrouter_model_picker_bar(providers_dropdown:mo.ui.dropdown,models_dropdow
             div("Provider",
                 klass=style
             ),
-            providers_dropdown
+            div(providers_dropdown,
+                klass=style
+            )
         ]),
         mo.hstack([
             div("Model",
                 klass=style
             ),
-            models_dropdown
+            div(models_dropdown,
+                klass=style
+            )
         ])
     ])
     return div(
