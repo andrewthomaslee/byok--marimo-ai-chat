@@ -174,26 +174,30 @@ name = "frfropen-ai"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
-    { name = "marimo", extra = ["recommended"] },
+    { name = "marimo" },
     { name = "mohtml" },
+    { name = "pydantic" },
     { name = "requests" },
 ]
 
 [package.dev-dependencies]
 dev = [
+    { name = "marimo", extra = ["recommended"] },
     { name = "python-lsp-server" },
     { name = "websockets" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "marimo", extras = ["recommended"], specifier = ">=0.14.0" },
+    { name = "marimo", specifier = ">=0.14.0" },
     { name = "mohtml", specifier = ">=0.1.10" },
+    { name = "pydantic", specifier = ">=2.11.7" },
     { name = "requests", specifier = ">=2.32.4" },
 ]
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "marimo", extras = ["recommended"], specifier = ">=0.14.0" },
     { name = "python-lsp-server", specifier = ">=1.12.2" },
     { name = "websockets", specifier = ">=15.0.1" },
 ]

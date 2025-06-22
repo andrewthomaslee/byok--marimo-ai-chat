@@ -5,13 +5,15 @@ description = "Bring your own keys marimo ai chat app. Stateless Version"
 readme = "README.md"
 requires-python = ">=3.13.3"
 dependencies = [
-    "marimo[recommended]>=0.14.0",
+    "marimo>=0.14.0",
     "mohtml>=0.1.10",
+    "pydantic>=2.11.7",
     "requests>=2.32.4",
 ]
 
 [dependency-groups]
 dev = [
+    "marimo[recommended]>=0.14.0",
     "python-lsp-server>=1.12.2",
     "websockets>=15.0.1",
 ]
