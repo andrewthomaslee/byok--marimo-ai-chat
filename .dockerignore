@@ -3,6 +3,7 @@
 .git
 .gitignore
 .vscode
+.dockerignore
 # Python-generated files
 __pycache__/
 *.py[oc]
@@ -10,9 +11,14 @@ build/
 dist/
 wheels/
 *.egg-info
+*.pyc
+*.pyo
+*.pyd
+
 
 # Virtual environments
 .venv
+venv/
 
 # marimo
 __marimo__/
